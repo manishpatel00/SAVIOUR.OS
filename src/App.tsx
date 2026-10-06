@@ -1512,9 +1512,12 @@ export default function App() {
               notifications={notifications}
               onMarkAsRead={handleMarkAsRead}
               onMarkAllAsRead={handleMarkAllAsRead}
+              onClearNotification={handleClearNotification}
               onClear={handleClearNotification}
+              onTriggerNotificationEmail={handleTriggerNotificationEmail}
               onSaveToDraft={handleTriggerNotificationEmail}
               accessToken={accessToken}
+              userEmail={user?.email || null}
             />
 
             {/* Settings Trigger */}

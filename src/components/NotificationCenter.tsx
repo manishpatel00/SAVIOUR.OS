@@ -4,27 +4,47 @@ import { AppNotification } from '../types';
 import { Bell, Check, Trash2, Mail, AlertTriangle, ShieldAlert, CheckCircle, Info, Send } from 'lucide-react';
 import { createGmailDraft } from '../lib/workspace';
 
-interface NotificationCenterProps {
+export interface NotificationCenterProps {
   notifications: AppNotification[];
-  accessToken: string | null;
-  userEmail: string | null;
-  onMarkAsRead: (id: string) => void;
-  onMarkAllAsRead: () => void;
-  onClearNotification: (id: string) => void;
-  onTriggerNotificationEmail: (notification: AppNotification) => Promise<void>;
+  accessToken?: string | null;
+  userEmail?: string | null;
+  onMarkAsRead?: (id: string) => void;
+  onMarkAllAsRead?: () => void;
+  onClearNotification?: (id: string) => void;
+  onClear?: (id: string) => void;
+  onTriggerNotificationEmail?: (notification: AppNotification) => Promise<void>;
+  onSaveToDraft?: (notification: AppNotification) => Promise<void>;
 }
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   notifications,
-  accessToken,
-  userEmail,
+  accessToken = null,
+  userEmail = null,
   onMarkAsRead,
   onMarkAllAsRead,
   onClearNotification,
-  onTriggerNotificationEmail
+  onClear,
+  onTriggerNotificationEmail,
+  onSaveToDraft
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [emailSendingId, setEmailSendingId] = useState<string | null>(null);
+
+  const handleClear = (id: string) => {
+    if (typeof onClearNotification === 'function') {
+      onClearNotification(id);
+    } else if (typeof onClear === 'function') {
+      onClear(id);
+    }
+  };
+
+  const handleEmailTrigger = async (n: AppNotification) => {
+    if (typeof onTriggerNotificationEmail === 'function') {
+      await onTriggerNotificationEmail(n);
+    } else if (typeof onSaveToDraft === 'function') {
+      await onSaveToDraft(n);
+    }
+  };
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -46,7 +66,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     if (!accessToken || !userEmail) return;
     try {
       setEmailSendingId(n.id);
-      await onTriggerNotificationEmail(n);
+      await handleEmailTrigger(n);
     } catch (err) {
       console.error(err);
     } finally {
@@ -101,7 +121,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 </div>
                 {unreadCount > 0 && (
                   <button
-                    onClick={onMarkAllAsRead}
+                    onClick={() => onMarkAllAsRead?.()}
                     className="text-[10px] text-brand hover:text-indigo-300 font-bold cursor-pointer transition-colors"
                   >
                     Mark all read
@@ -172,7 +192,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                       <div className="flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                         {!n.read && (
                           <button
-                            onClick={() => onMarkAsRead(n.id)}
+                            onClick={() => onMarkAsRead?.(n.id)}
                             className="p-1 rounded bg-zinc-900 border border-border hover:bg-zinc-800 text-text-sub hover:text-text transition-colors cursor-pointer"
                             title="Mark as read"
                           >
@@ -180,7 +200,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                           </button>
                         )}
                         <button
-                          onClick={() => onClearNotification(n.id)}
+                          onClick={() => handleClear(n.id)}
                           className="p-1 rounded bg-zinc-900 border border-border hover:bg-crisis/25 text-text-sub hover:text-crisis transition-colors cursor-pointer"
                           title="Delete notification"
                         >

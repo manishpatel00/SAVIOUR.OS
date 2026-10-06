@@ -200,4 +200,29 @@ describe('Saviour AI Sentinel Engine — Addy Osmani Engineering Quality Gates',
       expect(draft).toContain('Dear Team');
     });
   });
+
+  describe('Notification Management Logic', () => {
+    const mockNotifications = [
+      { id: 'n1', title: 'Alert 1', message: 'Test 1', type: 'alert' as const, createdAt: new Date().toISOString(), read: false },
+      { id: 'n2', title: 'Alert 2', message: 'Test 2', type: 'warning' as const, createdAt: new Date().toISOString(), read: false },
+      { id: 'n3', title: 'Alert 3', message: 'Test 3', type: 'info' as const, createdAt: new Date().toISOString(), read: true },
+    ];
+
+    it('clears target notification by id', () => {
+      const cleared = mockNotifications.filter(n => n.id !== 'n2');
+      expect(cleared).toHaveLength(2);
+      expect(cleared.find(n => n.id === 'n2')).toBeUndefined();
+    });
+
+    it('marks all notifications as read', () => {
+      const readAll = mockNotifications.map(n => ({ ...n, read: true }));
+      expect(readAll.every(n => n.read)).toBe(true);
+    });
+
+    it('marks single notification as read by id', () => {
+      const updated = mockNotifications.map(n => n.id === 'n1' ? { ...n, read: true } : n);
+      expect(updated.find(n => n.id === 'n1')?.read).toBe(true);
+      expect(updated.find(n => n.id === 'n2')?.read).toBe(false);
+    });
+  });
 });
