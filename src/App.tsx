@@ -25,22 +25,7 @@ import { googleSignIn, logout, initAuth } from './lib/auth';
 import { createGoogleCalendarEvent, createGmailDraft, listGoogleCalendarEvents } from './lib/workspace';
 import { saveUserDataToCloud, loadUserDataFromCloud, saveGoogleIntegration, loadGoogleIntegration, clearGoogleIntegration } from './lib/sync';
 import { User } from 'firebase/auth';
-
-function sanitizeUniqueIds<T extends { id: string }>(items: T[]): T[] {
-  if (!Array.isArray(items)) return [];
-  const seen = new Set<string>();
-  return items.map((item, index) => {
-    let id = item.id;
-    if (!id) {
-      id = `gen_${Date.now()}_${index}_${Math.random().toString(36).substring(2, 7)}`;
-    }
-    while (seen.has(id)) {
-      id = `${id}_dup_${Math.random().toString(36).substring(2, 7)}`;
-    }
-    seen.add(id);
-    return { ...item, id };
-  });
-}
+import { sanitizeUniqueIds } from './lib/sentinelEngine';
 
 export default function App() {
   // --- Local Storage Hydration States ---
@@ -141,13 +126,13 @@ export default function App() {
       const saved = localStorage.getItem('terminal_scanline_opacity');
       if (saved) return parseFloat(saved);
     }
-    return 0.45; // Retro CRT terminal atmospheric default
+    return 0.08; // High-contrast, crystal-clear, non-dimming modern terminal default
   });
   const [isFlickerEnabled, setIsFlickerEnabled] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('terminal_flicker_enabled') !== 'false';
+      return localStorage.getItem('terminal_flicker_enabled') === 'true';
     }
-    return true;
+    return false; // Disabled by default to prevent light dimming and screen flickering
   });
 
   // --- Google Calendar Sync States ---
@@ -1419,32 +1404,43 @@ export default function App() {
               <span className="h-[1px] bg-white/10 flex-1"></span>
             </div>
 
-            <div className="p-4 bg-zinc-950/80 border border-white/5 rounded-xl space-y-2.5 text-left relative group hover:border-brand/30 transition-all duration-300">
+            <div className="p-3.5 bg-zinc-950/90 border border-white/8 rounded-xl space-y-2 text-left relative group hover:border-brand/40 transition-all duration-300 shadow-lg shadow-black/50">
               <div className="corner corner-tl" />
               <div className="corner corner-tr" />
               <div className="corner corner-bl" />
               <div className="corner corner-br" />
               
-              <span className="text-[9px] font-mono text-brand font-bold uppercase tracking-widest block flex items-center gap-1.5">
-                <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full animate-pulse" />
-                EMAIL SANDBOX ACCESS
-              </span>
-              <p className="text-[10px] text-zinc-400 font-mono leading-normal">
-                If Google blocks authorization (e.g., Error 403: access_denied because the app is in developer test mode), enter any email below. Your planning data will sync securely in the Firestore cloud!
+              <div className="flex items-center justify-between">
+                <span className="text-[8.5px] font-mono text-brand font-bold uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full animate-pulse shadow-[0_0_6px_#00ff41]" />
+                  EMAIL SANDBOX ACCESS &bull; SECURE NODE
+                </span>
+                <span className="text-[8px] font-mono text-zinc-500 font-semibold tracking-wider uppercase">V4.2 RESILIENT</span>
+              </div>
+
+              <p className="text-[9.5px] text-zinc-400 font-mono leading-relaxed">
+                If Google authorization is restricted (e.g. Error 403 test mode), submit any email to establish a secure cloud session with Firestore persistence.
               </p>
-              <div className="flex gap-2">
+
+              <div className="flex gap-2 pt-0.5">
                 <input
                   type="email"
                   placeholder="user@example.com"
                   value={sandboxEmail}
                   onChange={(e) => setSandboxEmail(e.target.value)}
-                  className="bg-black border border-white/10 rounded-lg px-3 py-2 text-xs font-mono text-text placeholder-zinc-600 focus:outline-none focus:border-brand/40 flex-1 transition-all"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && sandboxEmail.trim()) {
+                      handleProceedWithEmail(sandboxEmail);
+                    }
+                  }}
+                  className="bg-[#09090b] border border-white/10 rounded-lg px-3 py-2 text-[11px] font-mono text-brand placeholder:text-zinc-600 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30 flex-1 transition-all"
+                  autoComplete="email"
                 />
                 <button
                   type="button"
                   onClick={() => handleProceedWithEmail(sandboxEmail)}
-                  disabled={isLoggingIn}
-                  className="px-4 bg-brand text-black rounded-lg hover:brightness-110 font-bold font-mono text-xs cursor-pointer transition-all disabled:opacity-50"
+                  disabled={isLoggingIn || !sandboxEmail.trim()}
+                  className="px-4 py-2 bg-brand text-black rounded-lg hover:brightness-110 font-bold font-mono text-[11px] uppercase tracking-wider cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_12px_rgba(0,255,65,0.2)]"
                 >
                   Go
                 </button>

@@ -40,7 +40,7 @@
   background-size: 100% 4px, 6px 100%;
   z-index: 999;
   pointer-events: none;
-  opacity: var(--scanline-opacity, 0.45);
+  opacity: var(--scanline-opacity, 0.08);
 }
 
 /* Terminal Corner Brackets */
@@ -154,4 +154,23 @@
   scroll-snap-align: center;
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+/* CYBERPUNK TERMINAL AUTOFILL OVERRIDES */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px #09090b inset !important;
+  -webkit-text-fill-color: #00ff41 !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #00ff41 !important;
+}
+
+input:autofill {
+  background-color: #09090b !important;
+  color: #00ff41 !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 11px !important;
 }
