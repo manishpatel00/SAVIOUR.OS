@@ -194,16 +194,26 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
   return (
     <div className="space-y-6">
       {/* Interactive Onboarding Strip */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface border border-border p-4 rounded-2xl font-sans">
-        <span className="text-xs text-text-sub font-light flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse flex-shrink-0" />
-          First time? Learn how your autonomous coordinator safeguards deliverables.
-        </span>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-zinc-950/80 border border-white/10 p-3.5 sm:p-4 rounded-xl font-mono relative overflow-hidden group hover:border-brand/30 transition-all duration-300 shadow-md">
+        <div className="corner corner-tl" />
+        <div className="corner corner-tr" />
+        <div className="corner corner-bl" />
+        <div className="corner corner-br" />
+        
+        <div className="flex items-center gap-2.5 text-xs text-zinc-300 leading-relaxed flex-1">
+          <Sparkles className="w-4 h-4 text-brand animate-pulse flex-shrink-0" />
+          <span className="text-[11px] sm:text-xs">
+            <span className="text-brand font-bold uppercase tracking-wider">First time?</span>{' '}
+            <span className="text-zinc-400">Discover how the autonomous sentinel safeguards your deliverables.</span>
+          </span>
+        </div>
+
         <button
+          type="button"
           onClick={onShowOnboarding}
-          className="px-4 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 text-indigo-300 hover:text-indigo-200 text-xs font-semibold rounded-full cursor-pointer transition-all flex items-center gap-1.5"
+          className="w-full sm:w-auto px-4 py-2 sm:py-1.5 bg-brand/10 hover:bg-brand/20 border border-brand/30 hover:border-brand text-brand hover:text-white text-xs font-mono font-bold uppercase tracking-wider rounded-lg cursor-pointer transition-all flex items-center justify-center gap-2 flex-shrink-0 shadow-[0_0_12px_rgba(0,255,65,0.1)] hover:shadow-[0_0_18px_rgba(0,255,65,0.25)] active:scale-[0.98]"
         >
-          <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+          <BookOpen className="w-3.5 h-3.5 text-brand" />
           <span>Run Interactive Onboarding</span>
         </button>
       </div>
