@@ -16,10 +16,11 @@ import { WorkspaceConnector } from './components/WorkspaceConnector';
 import { AnalyticsPanel } from './components/AnalyticsPanel';
 import { MasterControlDeck } from './components/MasterControlDeck';
 import { NavigationSidebar, NavigationSection } from './components/NavigationSidebar';
+import { AgentStatusMatrix } from './components/AgentStatusMatrix';
 import { 
   Bot, Sparkles, Flame, CheckCircle, Shield, Award, Calendar, Timer, 
   Layers, Volume2, Info, BookOpen, LogOut, Check, Mail, Settings, X, RefreshCw,
-  Terminal, Activity
+  Terminal, Activity, Cpu, Scissors, ArrowRight, AlertTriangle
 } from 'lucide-react';
 import { googleSignIn, logout, initAuth } from './lib/auth';
 import { createGoogleCalendarEvent, createGmailDraft, listGoogleCalendarEvents } from './lib/workspace';
@@ -1373,21 +1374,31 @@ export default function App() {
         </nav>
 
         {/* Hero Cover */}
-        <main className="flex-1 flex flex-col items-center justify-center max-w-5xl mx-auto px-6 text-center py-16 sm:py-24 relative z-10 w-full space-y-6">
-          <div className="text-brand font-mono text-xs uppercase font-bold tracking-widest glow-accent">
-            [SECURE_LOGIN_REQUISITE]
+        <main className="flex-1 flex flex-col items-center justify-center max-w-5xl mx-auto px-4 sm:px-6 text-center py-12 sm:py-20 relative z-10 w-full space-y-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/30 text-brand font-mono text-[10px] sm:text-[11px] uppercase font-bold tracking-widest glow-accent">
+            <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full animate-ping" />
+            <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full" />
+            <span>[SECURE_LOGIN_REQUISITE // SYSTEM OVERRIDE]</span>
           </div>
           
-          <h1 className="font-display tracking-tighter leading-[0.85] max-w-5xl mx-auto flex flex-col text-center">
-            <span className="text-white font-extrabold text-[40px] sm:text-[72px] xl:text-[84px] block uppercase">DEFEAT DEADLINES</span>
-            <span className="text-brand font-extrabold text-[44px] sm:text-[76px] xl:text-[90px] block uppercase glow-accent">BEFORE THEY DEFEAT YOU.</span>
+          <h1 className="font-display tracking-tight leading-[0.88] max-w-5xl mx-auto flex flex-col text-center select-none">
+            <span className="text-white font-extrabold text-[42px] sm:text-[76px] xl:text-[88px] block uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+              DEFEAT DEADLINES
+            </span>
+            <span className="text-brand font-extrabold text-[46px] sm:text-[80px] xl:text-[94px] block uppercase glow-accent">
+              BEFORE THEY DEFEAT YOU.
+            </span>
           </h1>
           
-          <p className="font-mono text-xs text-muted uppercase tracking-wider font-bold max-w-xl mx-auto leading-relaxed">
-            THE SYSTEM REQUIRES GOOGLE AUTHENTICATION TO CONSOLIDATE AND SECURE LIFE SENTINEL METRIC RECORDS. ZERO ANONYMOUS GUESTS. ZERO DATA FLASHING.
+          <p className="font-mono text-xs sm:text-sm text-zinc-400 uppercase tracking-wider font-bold max-w-2xl mx-auto leading-relaxed flex items-center justify-center gap-2">
+            <Cpu className="w-4 h-4 text-brand flex-shrink-0 animate-pulse" />
+            <span>DEPLOYING 5 AUTONOMOUS AGENTS TO GUARD PROJECT INTEGRITY.</span>
           </p>
 
-          <div className="pt-4 max-w-md mx-auto w-full space-y-4">
+          {/* 5 Autonomous Agents Live Telemetry Matrix */}
+          <AgentStatusMatrix />
+
+          <div className="pt-2 max-w-md mx-auto w-full space-y-4">
             <CTAButton
               variant="primary"
               size="lg"
@@ -1579,36 +1590,51 @@ export default function App() {
           
           {/* Hero Headings Section (High-Contrast System Terminal Cover Layout) */}
           {activeSection === 'console' && (
-            <header className="max-w-5xl mx-auto px-6 text-center pt-16 pb-10 flex flex-col items-center border-b border-dashed border-border mb-8 w-full space-y-4">
-              <div className="text-brand font-mono text-xs uppercase font-bold tracking-widest glow-accent">
-                [SYSTEM.OVERRIDE_ENABLED]
+            <header className="max-w-5xl mx-auto px-4 sm:px-6 text-center pt-12 sm:pt-16 pb-8 sm:pb-10 flex flex-col items-center border-b border-dashed border-border mb-8 w-full space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/10 border border-brand/30 text-brand font-mono text-[10px] sm:text-[11px] uppercase font-bold tracking-widest glow-accent">
+                <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full animate-ping" />
+                <span className="inline-block w-1.5 h-1.5 bg-brand rounded-full" />
+                <span>[SYSTEM.OVERRIDE_ENABLED // ACTIVE SENTINEL]</span>
               </div>
-              <h1 className="font-display tracking-tighter leading-[0.85] max-w-5xl mx-auto flex flex-col text-center">
-                <span className="text-white font-extrabold text-[40px] sm:text-[72px] xl:text-[84px] block uppercase">DEFEAT DEADLINES</span>
-                <span className="text-brand font-extrabold text-[44px] sm:text-[76px] xl:text-[90px] block uppercase glow-accent">BEFORE THEY DEFEAT YOU.</span>
+              <h1 className="font-display tracking-tight leading-[0.88] max-w-5xl mx-auto flex flex-col text-center select-none">
+                <span className="text-white font-extrabold text-[42px] sm:text-[76px] xl:text-[88px] block uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                  DEFEAT DEADLINES
+                </span>
+                <span className="text-brand font-extrabold text-[46px] sm:text-[80px] xl:text-[94px] block uppercase glow-accent">
+                  BEFORE THEY DEFEAT YOU.
+                </span>
               </h1>
               
-              <p className="font-mono text-xs text-muted uppercase tracking-wider font-bold max-w-xl mx-auto leading-relaxed">
-                DEPLOYING 5 AUTONOMOUS AGENTS TO GUARD PROJECT INTEGRITY.
+              <p className="font-mono text-xs sm:text-sm text-zinc-400 uppercase tracking-wider font-bold max-w-2xl mx-auto leading-relaxed flex items-center justify-center gap-2">
+                <Cpu className="w-4 h-4 text-brand flex-shrink-0 animate-pulse" />
+                <span>DEPLOYING 5 AUTONOMOUS AGENTS TO GUARD PROJECT INTEGRITY.</span>
               </p>
+
+              {/* 5 Autonomous Agents Live Telemetry Matrix */}
+              <AgentStatusMatrix onSelectAgent={() => setShowOnboarding(true)} />
 
               {/* Hero CTA row */}
               <div className="flex flex-col sm:flex-row gap-3 mt-6 w-full sm:w-auto px-4 justify-center font-mono">
                 <CTAButton
                   variant="primary"
                   size="lg"
+                  icon={<Shield className="w-4 h-4 text-black group-hover:scale-110 transition-transform" />}
                   onClick={() => {
                     setActiveSection('deadlines');
                   }}
-                  className="w-full sm:w-auto font-display font-bold uppercase tracking-wider text-xs"
+                  className="w-full sm:w-auto font-mono font-bold uppercase tracking-wider text-xs py-3.5 px-7 shadow-[0_0_25px_rgba(0,255,65,0.35)] hover:shadow-[0_0_35px_rgba(0,255,65,0.6)] cursor-pointer"
                 >
-                  START PROTECTING DEADLINES →
+                  <span className="flex items-center gap-2">
+                    START PROTECTING DEADLINES
+                    <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </CTAButton>
                 <CTAButton
-                  variant="ghost"
+                  variant="secondary"
                   size="lg"
+                  icon={<Bot className="w-4 h-4 text-brand group-hover:rotate-12 transition-transform" />}
                   onClick={() => setShowOnboarding(true)}
-                  className="w-full sm:w-auto text-muted hover:text-brand font-display font-bold uppercase tracking-wider text-xs"
+                  className="w-full sm:w-auto font-mono font-bold uppercase tracking-wider text-xs py-3.5 px-6 border border-white/10 hover:border-brand/40 bg-zinc-950/80 hover:bg-zinc-900 text-zinc-300 hover:text-white shadow-[0_0_15px_rgba(0,0,0,0.5)] cursor-pointer"
                 >
                   SEE HOW AGENTS WORK
                 </CTAButton>
